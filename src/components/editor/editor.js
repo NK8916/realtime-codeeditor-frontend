@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import openSocket from "socket.io-client";
 import { Controlled as CodeMirror } from "react-codemirror2";
-import axios from "axios";
 import "./editor.module.css";
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/dracula.css");

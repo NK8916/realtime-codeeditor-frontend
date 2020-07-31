@@ -4,6 +4,7 @@ import Editor from "./components/editor";
 import Home from "./components/Home";
 import "./App.css";
 import { Header } from "./components/Header/Header";
+import Verify from "./components/Verify";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
       <Switch>
         <Route path="/" exact component={Home}></Route>
         <Route path="/editor" exact component={Editor}></Route>
+        <Route path="/verify" exact component={Verify}></Route>
       </Switch>
     </main>
   );

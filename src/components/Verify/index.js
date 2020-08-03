@@ -9,8 +9,6 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import axios from "axios";
-import PropTypes from "prop-types";
-import styles from "./Verify.module.css";
 
 class Verify extends Component {
   constructor(props) {
@@ -25,13 +23,18 @@ class Verify extends Component {
   }
   async verify() {
     try {
-      const result = await axios.post("http://localhost:8000/verify", {
-        email: this.props.location.search.substr(1),
-        otp: this.state.otp,
-      });
-      console.log(result);
+      const result = await axios.post(
+        "http://localhost:8000/verify",
+        {
+          email: this.props.location.search.substr(1),
+          otp: this.state.otp,
+        },
+        { withCredentials: true }
+      );
+      console.log(result.data);
+      this.props.history.push(`/editor`);
     } catch (error) {
-      throw Error(error);
+      console.error(error);
     }
   }
   render() {

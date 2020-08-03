@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import openSocket from "socket.io-client";
-import { Navbar, NavbarBrand } from "react-bootstrap";
+import { Navbar, NavbarBrand, Nav, NavLink } from "react-bootstrap";
 var socket;
 class Header extends Component {
   constructor() {
@@ -14,7 +14,10 @@ class Header extends Component {
   render() {
     return (
       <Navbar bg="dark" variant="dark" className="mb-3 justify-content-center">
-        <NavbarBrand>Realtime Codeeditor</NavbarBrand>
+        <NavbarBrand href="/">Realtime Codeeditor</NavbarBrand>
+        <Nav className="mr-auto">
+          <NavLink href="/login">Login</NavLink>
+        </Nav>
       </Navbar>
     );
   }

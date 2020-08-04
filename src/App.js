@@ -6,6 +6,7 @@ import "./App.css";
 import { Header } from "./components/Header";
 import Verify from "./components/Verify";
 import Login from "./components/Login";
+import ForgotPassword from "./components/ForgotPassword";
 
 class App extends Component {
   render() {
@@ -17,6 +18,11 @@ class App extends Component {
           <Route path="/editor" exact component={Editor}></Route>
           <Route path="/verify" exact component={Verify}></Route>
           <Route path="/login" exact component={Login}></Route>
+          <Route
+            path="/forgot-password"
+            exact
+            component={ForgotPassword}
+          ></Route>
         </Switch>
       </main>
     );

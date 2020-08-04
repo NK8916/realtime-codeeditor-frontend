@@ -71,6 +71,7 @@ class Login extends Component {
                 </Button>
               </Card.Footer>
             </Card>
+            <a href="/forgot-password">Forgot Password</a>
           </Col>
         </Row>
       </Container>

@@ -7,6 +7,7 @@ import { Header } from "./components/Header";
 import Verify from "./components/Verify";
 import Login from "./components/Login";
 import ForgotPassword from "./components/ForgotPassword";
+import ResetPassword from "./components/ResetPassword";
 
 class App extends Component {
   render() {
@@ -23,6 +24,7 @@ class App extends Component {
             exact
             component={ForgotPassword}
           ></Route>
+          <Route path="/reset-password" component={ResetPassword}></Route>
         </Switch>
       </main>
     );

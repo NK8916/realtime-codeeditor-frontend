@@ -14,6 +14,7 @@ class ForgotPassword extends Component {
   constructor() {
     super();
     this.state = { email: "" };
+    this.email = this.email.bind(this);
     this.verify = this.verify.bind(this);
   }
   email(event) {

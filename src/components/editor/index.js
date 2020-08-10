@@ -7,17 +7,18 @@ require("codemirror/theme/dracula.css");
 
 require("codemirror/mode/javascript/javascript.js");
 var socket;
+
 class Editor extends Component {
   constructor(props) {
     super(props);
     console.log(props);
     socket = openSocket("http://localhost:8000");
     this.state = { room: "", code: "", output: "" };
-    this.handleRoom = this.handleRoom.bind(this);
-    this.submit = this.submit.bind(this);
+
     this.run = this.run.bind(this);
   }
   componentDidMount() {
+    console.log("editorprops", this.props.match.params.id);
     socket.on("code", (code) => {
       this.setState({ code });
     });
@@ -34,18 +35,13 @@ class Editor extends Component {
     indentation: 4,
   };
   codeString = "";
-  handleRoom(event) {
-    this.setState({ room: event.target.value });
-  }
+
   run() {
     const data = { room: this.state.room, code: this.state.code };
     console.log("datra", data);
     socket.emit("run", data);
   }
-  submit() {
-    console.log(this.state);
-    socket.emit("join", this.state.room);
-  }
+
   render() {
     return (
       <div>
@@ -64,15 +60,7 @@ class Editor extends Component {
         <button name="run" onClick={this.run}>
           Run
         </button>
-        <input
-          name="room"
-          value={this.state.value}
-          onChange={(event) => {
-            console.log(event.target.value);
-            this.setState({ room: event.target.value });
-          }}
-        ></input>
-        <button name="join" onClick={this.submit}></button>
+
         <div dangerouslySetInnerHTML={{ __html: this.state.output }}></div>
       </div>
     );

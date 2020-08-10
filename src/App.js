@@ -1,9 +1,11 @@
-import React, { useState, Component } from "react";
+import React, { Component, useReducer } from "react";
 import { Switch, Route } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
+import { connect } from "react-redux";
 import Editor from "./components/editor";
 import Home from "./components/Home";
 import "./App.css";
-import { Header } from "./components/Header";
+import Header from "./components/Header";
 import Verify from "./components/Verify";
 import Login from "./components/Login";
 import ForgotPassword from "./components/ForgotPassword";
@@ -12,11 +14,11 @@ import ResetPassword from "./components/ResetPassword";
 class App extends Component {
   render() {
     return (
-      <main>
+      <BrowserRouter>
         <Header />
         <Switch>
           <Route path="/" exact component={Home}></Route>
-          <Route path="/editor" exact component={Editor}></Route>
+          <Route path="/editor/:id" exact component={Editor}></Route>
           <Route path="/verify" exact component={Verify}></Route>
           <Route path="/login" exact component={Login}></Route>
           <Route
@@ -26,9 +28,15 @@ class App extends Component {
           ></Route>
           <Route path="/reset-password" component={ResetPassword}></Route>
         </Switch>
-      </main>
+      </BrowserRouter>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    authReducer: state.authReducer,
+  };
+};
+
+export default connect(mapStateToProps)(App);

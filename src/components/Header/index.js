@@ -1,25 +1,54 @@
-import React, { Component } from "react";
-import openSocket from "socket.io-client";
-import { Navbar, NavbarBrand, Nav, NavLink } from "react-bootstrap";
-var socket;
-class Header extends Component {
-  constructor() {
-    super();
-    this.state = {
-      endpoint: "http://localhost:8000",
-    };
+import React, { Component, useState } from "react";
+import { connect } from "react-redux";
+import { Navbar, NavbarBrand, Nav, NavLink, Text } from "react-bootstrap";
+import { authenticate, logoutUser } from "../../actions/auth-actions";
 
-    socket = openSocket(this.state.endpoint);
+class Header extends Component {
+  constructor(props) {
+    super(props);
+    console.log("props", props);
   }
+
+  componentDidMount() {
+    this.props.authenticate();
+  }
+
+  logout() {
+    console.log("prorp");
+    this.props.logoutUser();
+  }
+
+  getAuthLink() {
+    switch (this.props.authReducer.loggedIn) {
+      case true:
+        return <NavLink onClick={(e) => this.logout()}>Logout</NavLink>;
+      default:
+        return <NavLink href="/login">Login</NavLink>;
+    }
+  }
+
   render() {
     return (
       <Navbar bg="dark" variant="dark" className="mb-3 justify-content-center">
         <NavbarBrand href="/">Realtime Codeeditor</NavbarBrand>
-        <Nav className="mr-auto">
-          <NavLink href="/login">Login</NavLink>
-        </Nav>
+        <Nav className="mr-auto">{this.getAuthLink()}</Nav>
       </Navbar>
     );
   }
 }
-export { Header, socket };
+
+const mapStateToProps = (state) => {
+  console.log("auth", state);
+  return {
+    authReducer: state.authReducer,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    authenticate: () => dispatch(authenticate()),
+    logoutUser: () => dispatch(logoutUser()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

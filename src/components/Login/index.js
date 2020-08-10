@@ -1,5 +1,9 @@
 import React, { Component } from "react";
+import { v4 } from "uuid";
+import { connect } from "react-redux";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { authenticate, fetchUser } from "../../actions/auth-actions";
 import {
   Card,
   Button,
@@ -9,10 +13,12 @@ import {
   FormControl,
   InputGroup,
 } from "react-bootstrap";
+import { Redirect } from "react-router-dom";
 
 class Login extends Component {
   constructor(props) {
     super(props);
+    console.log("login", props);
     this.state = { email: "", password: "" };
     this.email = this.email.bind(this);
     this.password = this.password.bind(this);
@@ -25,21 +31,19 @@ class Login extends Component {
   password(event) {
     this.setState({ password: event.target.value });
   }
+
   async login() {
-    try {
-      const result = await axios.post(
-        "http://localhost:8000/login",
-        this.state,
-        { withCredentials: true }
-      );
-      console.log(result);
-      this.props.history.push(`/editor`);
-    } catch (error) {
-      console.error(error);
-    }
+    const data = {
+      email: this.state.email,
+      password: this.state.password,
+    };
+    console.log(data);
+    this.props.fetchUser(data);
   }
   render() {
-    return (
+    return this.props.authReducer.loggedIn ? (
+      <Redirect to={`/editor/${v4()}`}></Redirect>
+    ) : (
       <Container>
         <Row className="justify-content-center">
           <Col md="auto" className="col-centered">
@@ -79,4 +83,17 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapStateToProps = (state) => {
+  console.log("auth", state);
+  return {
+    authReducer: state.authReducer,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchUser: (userData) => dispatch(fetchUser(userData)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

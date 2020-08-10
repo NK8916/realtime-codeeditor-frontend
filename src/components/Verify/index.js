@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { v4 } from "uuid";
+import Cookies from "js-cookie";
 import {
   Card,
   Button,
@@ -23,16 +25,13 @@ class Verify extends Component {
   }
   async verify() {
     try {
-      const result = await axios.post(
-        "http://localhost:8000/verify",
-        {
-          email: this.props.location.search.substr(1),
-          otp: this.state.otp,
-        },
-        { withCredentials: true }
-      );
+      const result = await axios.post("http://localhost:8000/verify", {
+        email: this.props.location.search.substr(1),
+        otp: this.state.otp,
+      });
       console.log(result.data);
-      this.props.history.push(`/editor`);
+      Cookies.set("token", result.data.token);
+      this.props.history.push(`/editor/${v4()}`);
     } catch (error) {
       console.error(error);
     }

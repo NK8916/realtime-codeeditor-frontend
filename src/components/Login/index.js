@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { v4 } from "uuid";
+import { v5 } from "uuid";
 import { connect } from "react-redux";
-import axios from "axios";
-import Cookies from "js-cookie";
-import { authenticate, fetchUser } from "../../actions/auth-actions";
+import { UUID } from "../../config/uuid-config";
+import { fetchUser } from "../../actions/auth-actions";
 import {
   Card,
   Button,
@@ -14,6 +13,7 @@ import {
   InputGroup,
 } from "react-bootstrap";
 import { Redirect } from "react-router-dom";
+import "./Login.module.css";
 
 class Login extends Component {
   constructor(props) {
@@ -38,18 +38,19 @@ class Login extends Component {
       password: this.state.password,
     };
     console.log(data);
+    console.log("ststs", this.state);
     this.props.fetchUser(data);
   }
   render() {
     return this.props.authReducer.loggedIn ? (
-      <Redirect to={`/editor/${v4()}`}></Redirect>
+      <Redirect to={`/editor/${v5(this.state.email, UUID)}`}></Redirect>
     ) : (
-      <Container>
+      <Container className="mt-4">
         <Row className="justify-content-center">
           <Col md="auto" className="col-centered">
             <Card style={{ width: "18rem" }}>
               <Card.Body>
-                <Card.Title>Join</Card.Title>
+                <Card.Title>Login</Card.Title>
 
                 <InputGroup className="mb-3">
                   <FormControl
@@ -75,6 +76,7 @@ class Login extends Component {
                 </Button>
               </Card.Footer>
             </Card>
+
             <a href="/forgot-password">Forgot Password</a>
           </Col>
         </Row>

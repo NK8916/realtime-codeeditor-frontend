@@ -21,15 +21,23 @@ class Header extends Component {
   getAuthLink() {
     switch (this.props.authReducer.loggedIn) {
       case true:
-        return <NavLink onClick={(e) => this.logout()}>Logout</NavLink>;
+        return (
+          <NavLink className="float-right" onClick={(e) => this.logout()}>
+            Logout
+          </NavLink>
+        );
       default:
-        return <NavLink href="/login">Login</NavLink>;
+        return (
+          <NavLink className="float-right" href="/login">
+            Login
+          </NavLink>
+        );
     }
   }
 
   render() {
     return (
-      <Navbar bg="dark" variant="dark" className="mb-3 justify-content-center">
+      <Navbar bg="dark" variant="dark" className="justify-content-center">
         <NavbarBrand href="/">Realtime Codeeditor</NavbarBrand>
         <Nav className="mr-auto">{this.getAuthLink()}</Nav>
       </Navbar>

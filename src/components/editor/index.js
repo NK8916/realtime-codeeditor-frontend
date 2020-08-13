@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import openSocket from "socket.io-client";
+import { v5 } from "uuid";
+import db from "../../config/fbConfig";
+import { UUID } from "../../config/uuid-config";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "./editor.module.css";
+import { Button } from "react-bootstrap";
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/dracula.css");
 
@@ -18,12 +22,19 @@ class Editor extends Component {
     this.run = this.run.bind(this);
   }
   componentDidMount() {
-    console.log("editorprops", this.props.match.params.id);
+    const room = this.props.match.params.id.split("-")[0];
+    this.getCode();
+    this.setState({ room });
+    socket.emit("join", room);
     socket.on("code", (code) => {
       this.setState({ code });
     });
     socket.on("output", (output) => {
-      this.setState({ output });
+      if (output.stderr) {
+        this.setState({ output: JSON.stringify(output) });
+      } else {
+        this.setState({ output });
+      }
     });
   }
   editorOptions = {
@@ -34,7 +45,21 @@ class Editor extends Component {
     lineWrapping: true,
     indentation: 4,
   };
-  codeString = "";
+
+  async getCode() {
+    const userRef = db.collection("code").doc(this.props.match.params.id);
+    const user = await userRef.get();
+    this.setState({ code: user.data().code });
+  }
+  async onEditorChange(editor, data, code) {
+    this.setState({ code });
+    console.log(this.props);
+    socket.emit("code", { code, room: this.state.room });
+    await db
+      .collection("code")
+      .doc(this.props.match.params.id)
+      .set({ code: this.state.code });
+  }
 
   run() {
     const data = { room: this.state.room, code: this.state.code };
@@ -53,13 +78,18 @@ class Editor extends Component {
             this.instance = editor;
           }}
           onBeforeChange={(editor, data, code) => {
-            this.setState({ code });
-            socket.emit("code", { code, room: this.state.room });
+            this.onEditorChange(editor, data, code);
           }}
         />
-        <button name="run" onClick={this.run}>
+        <Button
+          variant="outline-success"
+          className="float-right m-1"
+          size="lg"
+          name="run"
+          onClick={this.run}
+        >
           Run
-        </button>
+        </Button>
 
         <div dangerouslySetInnerHTML={{ __html: this.state.output }}></div>
       </div>

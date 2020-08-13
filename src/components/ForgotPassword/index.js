@@ -29,7 +29,7 @@ class ForgotPassword extends Component {
   }
   render() {
     return (
-      <Container>
+      <Container className="mt-4">
         <Row className="justify-content-center">
           <Col md="auto" className="col-centered">
             <Card style={{ width: "18rem" }}>

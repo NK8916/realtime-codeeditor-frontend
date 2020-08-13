@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import openSocket from "socket.io-client";
-import { v5 } from "uuid";
 import db from "../../config/fbConfig";
-import { UUID } from "../../config/uuid-config";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "./editor.module.css";
 import { Button } from "react-bootstrap";

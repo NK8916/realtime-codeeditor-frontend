@@ -1,6 +1,6 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Navbar, NavbarBrand, Nav, NavLink, Text } from "react-bootstrap";
+import { Navbar, NavbarBrand, Nav, NavLink } from "react-bootstrap";
 import { authenticate, logoutUser } from "../../actions/auth-actions";
 
 class Header extends Component {

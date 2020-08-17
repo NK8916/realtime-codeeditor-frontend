@@ -1,10 +1,11 @@
 import Cookies from "js-cookie";
+import { CONFIG } from "../config/config";
 
 const setUser = (payload) => ({ type: "SET_USER", payload });
 const logout = () => ({ type: "LOG_OUT" });
 
 export const fetchUser = (userData) => (dispatch) => {
-  fetch("http://localhost:8000/login", {
+  fetch(`${CONFIG.BASE_URL}/login`, {
     method: "POST",
     headers: {
       "Content-type": "application/json",
@@ -15,7 +16,7 @@ export const fetchUser = (userData) => (dispatch) => {
     .then((res) => res.json())
     .then((data) => {
       Cookies.set("token", data.token);
-      dispatch(setUser(data));
+      dispatch(setUser({ data, token: data.token }));
       return data;
     })
     .catch((err) => {

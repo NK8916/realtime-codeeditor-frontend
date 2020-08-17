@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import openSocket from "socket.io-client";
+import Cookies from "js-cookie";
 import db from "../../config/fbConfig";
 import { Controlled as CodeMirror } from "react-codemirror2";
 import "./editor.module.css";
@@ -15,15 +16,18 @@ class Editor extends Component {
     super(props);
     console.log(props);
     socket = openSocket("http://localhost:8000");
-    this.state = { room: "", code: "", output: "" };
+    this.state = {
+      room: props.match.params.id.split("-")[0],
+      code: "",
+      output: "",
+    };
 
     this.run = this.run.bind(this);
   }
   componentDidMount() {
-    const room = this.props.match.params.id.split("-")[0];
+    Cookies.set("room", this.state.room);
     this.getCode();
-    this.setState({ room });
-    socket.emit("join", room);
+    socket.emit("join", this.state.room);
     socket.on("code", (code) => {
       this.setState({ code });
     });
@@ -45,9 +49,13 @@ class Editor extends Component {
   };
 
   async getCode() {
-    const userRef = db.collection("code").doc(this.props.match.params.id);
+    const userRef = db.collection("code").doc(this.state.room);
     const user = await userRef.get();
-    this.setState({ code: user.data().code });
+    if (!user.data()) {
+      this.setState({ code: "" });
+    } else {
+      this.setState({ code: user.data().code });
+    }
   }
   async onEditorChange(editor, data, code) {
     this.setState({ code });
@@ -55,7 +63,7 @@ class Editor extends Component {
     socket.emit("code", { code, room: this.state.room });
     await db
       .collection("code")
-      .doc(this.props.match.params.id)
+      .doc(this.state.room)
       .set({ code: this.state.code });
   }
 

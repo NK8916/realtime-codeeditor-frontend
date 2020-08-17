@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import "./editor.module.css";
 import openSocket from "socket.io-client";
 import Cookies from "js-cookie";
 import db from "../../config/fbConfig";
 import { Controlled as CodeMirror } from "react-codemirror2";
-import "./editor.module.css";
+
 import { Button } from "react-bootstrap";
 require("codemirror/lib/codemirror.css");
 require("codemirror/theme/dracula.css");
@@ -96,6 +97,8 @@ class Editor extends Component {
         >
           Run
         </Button>
+
+        <h4>Output</h4>
 
         <div dangerouslySetInnerHTML={{ __html: this.state.output }}></div>
       </div>

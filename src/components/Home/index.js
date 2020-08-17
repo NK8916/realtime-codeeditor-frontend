@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { connect } from "react-redux";
+import { v5 } from "uuid";
+import { register } from "../../actions/auth-actions";
+import { Redirect } from "react-router-dom";
 import {
   Card,
   Button,
@@ -9,8 +12,10 @@ import {
   FormControl,
   InputGroup,
 } from "react-bootstrap";
+
 import "./Home.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { UUID } from "../../config/uuid-config";
 
 class Home extends Component {
   constructor(props) {
@@ -19,7 +24,7 @@ class Home extends Component {
     this.name = this.name.bind(this);
     this.email = this.email.bind(this);
     this.password = this.password.bind(this);
-    this.send = this.send.bind(this);
+    this.register = this.register.bind(this);
   }
 
   name(event) {
@@ -33,20 +38,14 @@ class Home extends Component {
     this.setState({ password: event.target.value });
   }
 
-  send() {
-    console.log(this.state);
-    axios
-      .post("http://localhost:8000/register", this.state)
-      .then((res) => {
-        console.log(res.data);
-        this.props.history.push(`/verify?${this.state.email}`);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  register() {
+    console.log(this.props);
+    this.props.register(this.state);
   }
   render() {
-    return (
+    return this.props.authReducer.need_to_verify ? (
+      <Redirect to={`/verify`}></Redirect>
+    ) : (
       <Container>
         <Row className="justify-content-center">
           <Col md="auto" className="col-centered">
@@ -81,7 +80,7 @@ class Home extends Component {
                 </InputGroup>
               </Card.Body>
               <Card.Footer>
-                <Button onClick={this.send} variant="primary">
+                <Button onClick={this.register} variant="primary">
                   Get Started
                 </Button>
               </Card.Footer>
@@ -93,4 +92,17 @@ class Home extends Component {
   }
 }
 
-export default Home;
+const mapStateToProps = (state) => {
+  console.log("auth", state);
+  return {
+    authReducer: state.authReducer,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    register: (userData) => dispatch(register(userData)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

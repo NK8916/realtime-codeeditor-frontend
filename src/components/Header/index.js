@@ -29,12 +29,10 @@ class Header extends Component {
   }
 
   logout() {
-    console.log("prorp");
     this.props.logoutUser();
   }
 
   showModal() {
-    console.log("propsswdd", this.props.authReducer.user);
     this.setState({
       room: Cookies.get("room"),
     });

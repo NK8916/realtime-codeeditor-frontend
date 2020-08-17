@@ -1,6 +1,7 @@
 import React, { Component } from "react";
-import { v4 } from "uuid";
-import Cookies from "js-cookie";
+import { v5 } from "uuid";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import {
   Card,
   Button,
@@ -10,7 +11,9 @@ import {
   FormControl,
   InputGroup,
 } from "react-bootstrap";
-import axios from "axios";
+
+import { UUID } from "../../config/uuid-config";
+import { verify } from "../../actions/auth-actions";
 
 class Verify extends Component {
   constructor(props) {
@@ -24,20 +27,18 @@ class Verify extends Component {
     this.setState({ otp: event.target.value });
   }
   async verify() {
-    try {
-      const result = await axios.post("http://localhost:8000/verify", {
-        email: this.props.location.search.substr(1),
-        otp: this.state.otp,
-      });
-      console.log(result.data);
-      Cookies.set("token", result.data.token);
-      this.props.history.push(`/editor/${v4()}`);
-    } catch (error) {
-      console.error(error);
-    }
+    const data = {
+      otp: this.state.otp,
+      email: this.props.location.search.substr(1),
+    };
+    this.props.verify(data);
   }
   render() {
-    return (
+    return this.props.authReducer.loggedIn ? (
+      <Redirect
+        to={`/editor/${v5(this.props.location.search.substr(1), UUID)}`}
+      ></Redirect>
+    ) : (
       <Container>
         <Row className="justify-content-center">
           <Col md="auto" className="col-centered">
@@ -66,4 +67,16 @@ class Verify extends Component {
   }
 }
 
-export default Verify;
+const mapStateToProps = (state) => {
+  console.log("auth", state);
+  return {
+    authReducer: state.authReducer,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    verify: (data) => dispatch(verify(data)),
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Verify);

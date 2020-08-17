@@ -1,7 +1,6 @@
-import Cookies from "js-cookie";
-
 const defaultState = {
   loggedIn: false,
+  need_to_verify: false,
   user: {},
 };
 
@@ -12,6 +11,10 @@ const authReducer = (state = defaultState, action) => {
       return {
         loggedIn: true,
         user: { ...action.payload },
+      };
+    case "VERIFY_USER":
+      return {
+        need_to_verify: action.need_to_verify,
       };
 
     case "LOG_OUT":

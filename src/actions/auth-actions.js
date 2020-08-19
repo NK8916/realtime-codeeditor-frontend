@@ -98,6 +98,24 @@ export const resetPassword = (data) => (dispatch) => {
     });
 };
 
+export const forgotPassword = (data) => (dispatch) => {
+  fetch(`${CONFIG.BASE_URL}forgot-password`, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
 export const authenticate = () => (dispatch) => {
   const token = Cookies.get("token");
   console.log("totktk", token);

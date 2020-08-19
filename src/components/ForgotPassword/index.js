@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { connect } from "react-redux";
 import {
   Card,
   Button,
@@ -9,6 +9,7 @@ import {
   FormControl,
   InputGroup,
 } from "react-bootstrap";
+import { forgotPassword } from "../../actions/auth-actions";
 
 class ForgotPassword extends Component {
   constructor() {
@@ -21,11 +22,7 @@ class ForgotPassword extends Component {
     this.setState({ email: event.target.value });
   }
   async verify() {
-    try {
-      await axios.post("http://localhost:8000/forgot-password", this.state);
-    } catch (error) {
-      console.error(error);
-    }
+    this.props.forgotPassword(this.state);
   }
   render() {
     return (
@@ -58,4 +55,10 @@ class ForgotPassword extends Component {
   }
 }
 
-export default ForgotPassword;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    forgotPassword: (data) => dispatch(forgotPassword(data)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ForgotPassword);

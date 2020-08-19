@@ -10,6 +10,7 @@ import {
   Col,
   FormControl,
   InputGroup,
+  Toast,
 } from "react-bootstrap";
 
 import { UUID } from "../../config/uuid-config";
@@ -18,9 +19,13 @@ import { verify } from "../../actions/auth-actions";
 class Verify extends Component {
   constructor(props) {
     super(props);
-    this.state = { otp: "" };
+    this.state = { otp: "", show: false };
     this.otp = this.otp.bind(this);
     this.verify = this.verify.bind(this);
+    this.close = this.close.bind(this);
+  }
+  componentDidMount() {
+    this.show();
   }
   otp(event) {
     console.log(this.props.location.search.substr(1));
@@ -32,6 +37,13 @@ class Verify extends Component {
       email: this.props.location.search.substr(1),
     };
     this.props.verify(data);
+  }
+
+  show() {
+    this.setState({ show: true });
+  }
+  close() {
+    this.setState({ show: false });
   }
   render() {
     return this.props.authReducer.loggedIn ? (
@@ -60,6 +72,9 @@ class Verify extends Component {
                 </Button>
               </Card.Footer>
             </Card>
+            <Toast show={this.state.show} onClose={this.close}>
+              <Toast.Header>Check Your Email For The OTP !!!</Toast.Header>
+            </Toast>
           </Col>
         </Row>
       </Container>

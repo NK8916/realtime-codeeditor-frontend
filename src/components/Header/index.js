@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Cookies from "js-cookie";
-import { v5 } from "uuid";
-import { UUID } from "../../config/uuid-config";
 import {
   Navbar,
   NavbarBrand,
@@ -10,6 +8,7 @@ import {
   NavLink,
   Modal,
   ModalBody,
+  ModalTitle,
 } from "react-bootstrap";
 import { authenticate, logoutUser } from "../../actions/auth-actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -70,6 +69,10 @@ class Header extends Component {
     return (
       <main>
         <Modal show={this.state.show} onHide={this.hideModal}>
+          <Modal.Header>
+            <ModalTitle>Share link to collab</ModalTitle>
+          </Modal.Header>
+
           <ModalBody>{`http://localhost:3000/editor/${this.state.room}`}</ModalBody>
         </Modal>
         <Navbar bg="dark" variant="dark" className="justify-content-center">

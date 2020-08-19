@@ -14,16 +14,18 @@ import { forgotPassword } from "../../actions/auth-actions";
 class ForgotPassword extends Component {
   constructor() {
     super();
-    this.state = { email: "" };
+    this.state = { email: "", show: false };
     this.email = this.email.bind(this);
     this.verify = this.verify.bind(this);
   }
+
   email(event) {
     this.setState({ email: event.target.value });
   }
   async verify() {
     this.props.forgotPassword(this.state);
   }
+
   render() {
     return (
       <Container className="mt-4">

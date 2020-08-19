@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { connect } from "react-redux";
 import {
   Card,
   Button,
@@ -9,6 +9,8 @@ import {
   FormControl,
   InputGroup,
 } from "react-bootstrap";
+
+import { resetPassword } from "../../actions/auth-actions";
 
 class ResetPassword extends Component {
   constructor(props) {
@@ -26,23 +28,14 @@ class ResetPassword extends Component {
   }
 
   async reset() {
-    if (this.state.newPassword === this.state.confirmPassword) {
-      try {
-        const result = await axios.post(
-          "http://localhost:8000/reset-password",
-          {
-            password: this.state.newPassword,
-            email: this.props.location.search.substr(1),
-          }
-        );
-        console.log(result);
-        this.props.history.push(`/login`);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      console.error("Passwords didn't match");
-    }
+    const data = {
+      password: this.state.newPassword,
+      email: this.props.location.search.substr(1),
+    };
+
+    this.props.resetPassword(data);
+
+    this.props.history.push("/login");
   }
 
   render() {
@@ -85,4 +78,10 @@ class ResetPassword extends Component {
   }
 }
 
-export default ResetPassword;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    resetPassword: (data) => dispatch(resetPassword(data)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ResetPassword);

@@ -80,6 +80,24 @@ export const logoutUser = () => (dispatch) => {
   dispatch(logout());
 };
 
+export const resetPassword = (data) => (dispatch) => {
+  fetch(`${CONFIG.BASE_URL}/reset-password`, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+      Accept: "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
 export const authenticate = () => (dispatch) => {
   const token = Cookies.get("token");
   console.log("totktk", token);

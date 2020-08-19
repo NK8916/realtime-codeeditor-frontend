@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { v5 } from "uuid";
 import { register } from "../../actions/auth-actions";
 import { Redirect } from "react-router-dom";
 import {
@@ -15,7 +14,6 @@ import {
 
 import "./Home.module.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { UUID } from "../../config/uuid-config";
 
 class Home extends Component {
   constructor(props) {

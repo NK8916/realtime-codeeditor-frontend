@@ -14,6 +14,8 @@ import { authenticate, logoutUser } from "../../actions/auth-actions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShareAlt } from "@fortawesome/free-solid-svg-icons";
 
+import { CONFIG } from "../../config/config";
+
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -73,7 +75,7 @@ class Header extends Component {
             <ModalTitle>Share link to collab</ModalTitle>
           </Modal.Header>
 
-          <ModalBody>{`http://localhost:3000/editor/${this.state.room}`}</ModalBody>
+          <ModalBody>{`${CONFIG.BASE_URL}/editor/${this.state.room}`}</ModalBody>
         </Modal>
         <Navbar bg="dark" variant="dark" className="justify-content-center">
           <NavbarBrand href="/">Realtime Codeeditor</NavbarBrand>

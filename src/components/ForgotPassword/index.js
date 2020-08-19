@@ -40,7 +40,7 @@ class ForgotPassword extends Component {
                     value={this.state.email}
                     type="email"
                     onChange={this.email}
-                    placeholder="Work Email"
+                    placeholder="Enter Your Email"
                   ></FormControl>
                 </InputGroup>
               </Card.Body>
